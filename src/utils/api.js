@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_BASE_URL = "http://localhost:8000/api/game";
+export const API_BASE_URL = "http://65.0.86.58/api/api/game";
 
 export const createUser = async (username) => {
   return axios.post(`${API_BASE_URL}/create-user`, { username });
