@@ -1,24 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import LandingPage from "./components/LandingPage";
+import Game from "./components/Game";
+import Leaderboard from "./components/Leaderboard";
+import ChallengeFriend from "./components/ChallengeFriend";
+import InvitedGame from "./components/InvitedGame";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/game" element={<Game />} />
+      <Route path="/leaderboard" element={<Leaderboard />} />
+      <Route path="/challenge" element={<ChallengeFriend />} />
+      <Route path="/invite/:username" element={<InvitedGame />} />
+    </Routes>
   );
 }
 
