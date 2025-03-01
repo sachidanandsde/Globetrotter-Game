@@ -1,0 +1,49 @@
+@import "https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css";
+
+/* Background styling */
+.game-container {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  padding: 20px;
+}
+
+/* Card styling */
+.game-card {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 15px;
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+}
+
+.game-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+/* Button animations */
+.animated-btn {
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.animated-btn:hover {
+  transform: scale(1.1);
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Option buttons */
+.option-btn {
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.option-btn:hover {
+  transform: scale(1.05);
+  background-color: #007bff !important;
+  color: white !important;
+}
+/* Correct Answer Text */
+.correct-answer {
+  color: white !important;
+  font-weight: bold;
+  background-color: #28a745; /* Green background */
+  padding: 10px;
+  border-radius: 8px;
+  display: inline-block;
+}

@@ -1,30 +1,41 @@
 import { useState, useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
 import Confetti from "react-confetti";
-import { Card, CardContent } from "../components/ui/Card";
-import { getRandomDestination, checkAnswer } from "../utils/api";
-import Button from "./ui/Button";
+import { getRandomDestination, checkAnswer, getUserScore } from "../utils/api";
+import { Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./Game.css"; // Import custom styles
 
 function Game() {
   const [question, setQuestion] = useState(null);
   const [selected, setSelected] = useState(null);
   const [feedback, setFeedback] = useState(null);
+  const [score, setScore] = useState(0);
   const [searchParams] = useSearchParams();
   const username = searchParams.get("username");
 
-  const fetchQuestion = async () => {
-    try {
-      const res = await getRandomDestination(username);
-      setQuestion(res.data);
-      setSelected(null);
-      setFeedback(null);
-    } catch (error) {
-      console.error("Error fetching question:", error);
-    }
-  };
+  useEffect(() => {
+    const fetchQuestion = async () => {
+      try {
+        const res = await getRandomDestination(username);
+        setQuestion(res.data);
+      } catch (error) {
+        console.error("Error fetching question:", error);
+      }
+    };
+    fetchQuestion();
+  }, [username]);
 
   useEffect(() => {
-    fetchQuestion();
+    const fetchScore = async () => {
+      try {
+        const res = await getUserScore(username);
+        setScore(res.data.score);
+      } catch (error) {
+        console.error("Error fetching score:", error);
+      }
+    };
+    fetchScore();
   }, [username]);
 
   const handleAnswer = async (answer) => {
@@ -32,69 +43,59 @@ function Game() {
     try {
       const res = await checkAnswer(username, question.id, answer);
       setFeedback(res.data);
+      if (res.data.correct) {
+        setScore((prevScore) => prevScore + 10);
+      }
     } catch (error) {
       console.error("Error checking answer:", error);
     }
   };
 
-  const handlePlayAgain = () => {
-    setSelected(null);
-    setFeedback(null);
-  };
-
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-blue-300 to-teal-400 p-6 text-center">
+    <div className="game-container d-flex flex-column align-items-center justify-content-center min-vh-100 text-center">
+      <h1 className="fw-bold mb-3 text-white animate__animated animate__fadeInDown">
+        🌍 Guess the Destination ✈️
+      </h1>
+      <p className="fs-5 fw-semibold text-light animate__animated animate__fadeInUp">
+        🏆 My Score: {score}
+      </p>
       {feedback?.correct && <Confetti />}
 
-      {/* Title */}
-      <h1 className="text-5xl font-extrabold text-white drop-shadow-lg mb-8">
-        🌍 Guess the Destination
-      </h1>
-
-      {/* Card Container */}
-      <Card className="w-full max-w-lg bg-white p-8 shadow-2xl rounded-2xl">
-        <CardContent>
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">{question?.clue}</h2>
-          <p className="text-gray-700 text-lg mb-6">Choose one option:</p>
-
-          <div className="grid grid-cols-1 gap-4">
-            {question?.options.map((opt) => (
-              <Button
-                key={opt}
-                className={`w-full py-3 px-5 rounded-xl text-lg font-semibold transition-all duration-300 ${
-                  selected === opt
-                    ? "bg-blue-600 text-white shadow-lg"
-                    : "bg-gray-200 text-gray-900 hover:bg-gray-300"
-                }`}
-                onClick={() => handleAnswer(opt)}
-              >
-                {opt}
-              </Button>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Feedback Message */}
-      {feedback && (
-        <div className="mt-8 p-4 w-full max-w-md bg-white rounded-xl shadow-lg">
-          {feedback.correct ? (
-            <p className="text-green-600 text-2xl font-bold">✅ {feedback.message}</p>
-          ) : (
-            <p className="text-red-600 text-2xl font-bold">❌ Wrong answer! Try Again 😢</p>
-          )}
-          <p className="text-gray-700 mt-4">{feedback.fun_fact}</p>
+      <div className="card game-card mx-auto mt-4 p-4 shadow-lg animate__animated animate__zoomIn">
+        <div className="card-body">
+          <h2 className="card-title mb-3">{question?.clue}</h2>
+          <p className="mb-2">🧐 Choose one option:</p>
+          {question?.options.map((opt) => (
+            <button
+              key={opt}
+              className={`btn w-100 my-2 option-btn ${selected === opt ? "btn-primary text-white" : "btn-outline-primary"}`}
+              onClick={() => handleAnswer(opt)}
+            >
+              {opt}
+            </button>
+          ))}
         </div>
-      )}
+      </div>
 
-      {/* Buttons */}
-      <div className="mt-8 flex gap-6">
-        <Button className="bg-gray-700 text-white px-6 py-3 rounded-xl text-lg shadow-lg hover:bg-gray-800" onClick={handlePlayAgain}>
+      {feedback && (
+          <p className={`mt-4 fs-5 animate__animated ${feedback.correct ? "animate__bounceIn correct-answer" : "animate__shakeX text-danger"}`}>
+            {feedback.correct ? "🎉 " + feedback.message : "❌ Incorrect! Try again 😞"}
+            {feedback.fun_fact && <span> 📖 {feedback.fun_fact}</span>}
+          </p>
+        )}
+
+      <div className="mt-4 d-flex justify-content-center gap-3">
+        <button onClick={() => window.location.reload()} className="btn btn-primary animated-btn">
           🔄 Play Again
-        </Button>
-        <Button className="bg-blue-700 text-white px-6 py-3 rounded-xl text-lg shadow-lg hover:bg-blue-800" onClick={fetchQuestion}>
+        </button>
+        <button onClick={() => window.location.href = `/game?username=${username}`} className="btn btn-success animated-btn">
           ➡️ Next Question
-        </Button>
+        </button>
+      </div>
+
+      <div className="mt-4">
+        <Link to="/leaderboard" className="btn btn-warning text-dark fw-semibold me-2 animated-btn">🏅 View Leaderboard</Link>
+        <Link to={`/challenge?username=${username}`} className="btn btn-danger text-white fw-semibold animated-btn">🎯 Challenge a Friend</Link>
       </div>
     </div>
   );
