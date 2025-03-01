@@ -25,7 +25,7 @@ function ChallengeFriend() {
   const handleChallenge = async () => {
     try {
       const { data } = await challengeFriend(username, friendUsername);
-      const generatedLink = `http://65.0.86.58/game?username=${friendUsername}&inviter=${username}&score=${score}`;
+      const generatedLink = `http://65.0.86.58:3000/game?username=${friendUsername}&inviter=${username}&score=${score}`;
       setInviteLink(generatedLink);
     } catch (error) {
       console.error("Error challenging friend:", error);
