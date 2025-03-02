@@ -1,70 +1,86 @@
-# Getting Started with Create React App
+# Globetrotter Game
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Globetrotter Game is an interactive travel guessing game where users can challenge their friends, test their geographical knowledge, and track their scores. Built with Django, React, and MongoDB, this full-stack application provides an engaging user experience with AI-powered features.
 
-## Available Scripts
+## Features
+- **Guess the Location**: Players guess locations based on images and clues.
+- **Challenge a Friend**: Invite friends via a shareable link with a dynamic image.
+- **AI-Powered Insights**: AI integration enhances gameplay.
+- **Score Tracking**: Leaderboard to track performance.
+- **Social Features**: Share and compete with friends.
 
-In the project directory, you can run:
+## Tech Stack
+- **Frontend**: React, Bootstrap, Animate.css
+- **Backend**: Django, Django REST Framework
+- **Database**: MongoDB (using PyMongo)
+- **Deployment**: AWS EC2, Gunicorn, PM2 (for frontend hosting)
 
-### `npm start`
+## Installation & Setup
+### Backend Setup
+1. **Clone the Repository:**
+   ```sh
+   git clone https://github.com/sachidanandsde/Globetrotter-Game.git
+   cd Globetrotter-Game/globetrotter-backend
+   ```
+2. **Set Up Virtual Environment & Install Dependencies:**
+   ```sh
+   python -m venv venv
+   source venv/bin/activate
+   pip install -r requirements.txt
+   ```
+3. **Configure MongoDB** (Update `settings.py` with MongoDB credentials).
+4. **Run Migrations & Start Server:**
+   ```sh
+   python manage.py migrate
+   python manage.py runserver 0.0.0.0:8000
+   ```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### Frontend Setup
+1. **Navigate to the Frontend Directory:**
+   ```sh
+   cd ../globetrotter-frontend
+   ```
+2. **Install Dependencies:**
+   ```sh
+   npm install
+   ```
+3. **Run the Development Server:**
+   ```sh
+   npm start
+   ```
+4. **For Production Build:**
+   ```sh
+   npm run build
+   ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Deployment
+### Backend (Django + Gunicorn on AWS EC2)
+- Run the server with Gunicorn:
+  ```sh
+  gunicorn --bind 0.0.0.0:8000 globetrotter.wsgi:application
+  ```
 
-### `npm test`
+### Frontend (React on AWS EC2 using PM2)
+- Serve the React build folder:
+  ```sh
+  pm2 serve build --name globetrotter-frontend --spa --port 3000
+  ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## API Endpoints
+- `POST /api/game/create-user` - Create a new user.
+- `GET /api/game/leaderboard` - Fetch leaderboard.
+- `POST /api/game/challenge` - Send a challenge invite.
 
-### `npm run build`
+## Contributing
+1. Fork the repo & clone it locally.
+2. Create a new branch (`git checkout -b feature-name`).
+3. Make your changes and commit (`git commit -m "Added feature X"`).
+4. Push to the branch (`git push origin feature-name`).
+5. Open a Pull Request.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## License
+This project is licensed under the MIT License.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Contact
+For queries, open an issue or contact [Sachidanand](https://github.com/sachidanandsde).
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
